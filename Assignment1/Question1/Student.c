@@ -1,27 +1,20 @@
 #include "Student.h"
-#include <stdlib.h>
 
-int* plusOne(int* digits, int digitsSize, int* returnSize) {
-    int carry = 1;
+void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n) {
+    int total = m + n;
 
-    for (int i = digitsSize - 1; i >= 0; i--) {
-        int sum = digits[i] + carry;
-        digits[i] = sum % 10;
-        carry = sum / 10;
+    if (n > nums2Size) n = nums2Size;
+    if (total > nums1Size) total = nums1Size;
 
-        if (carry == 0) break;
+    int i = m - 1;
+    int j = n - 1;
+    int k = total - 1;
+
+    while (j >= 0 && k >= 0) {
+        if (i >= 0 && nums1[i] > nums2[j]) {
+            nums1[k--] = nums1[i--];
+        } else {
+            nums1[k--] = nums2[j--];
+        }
     }
-
-    if (carry == 0) {
-        int* out = malloc(digitsSize * sizeof(int));
-        for (int i = 0; i < digitsSize; i++) out[i] = digits[i];
-        *returnSize = digitsSize;
-        return out;
-    }
-
-    int* out = malloc((digitsSize + 1) * sizeof(int));
-    out[0] = 1;
-    for (int i = 0; i < digitsSize; i++) out[i + 1] = digits[i];
-    *returnSize = digitsSize + 1;
-    return out;
 }
