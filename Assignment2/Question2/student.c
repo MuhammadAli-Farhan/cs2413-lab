@@ -1,26 +1,6 @@
-/*
- * Assignment 2 / Question 2 / student.c
- * ------------------------------------------------------------
- * Check if a BST is an AVL tree
- *
- * Implement:
- *   bool isAVL(struct TreeNode* root);
- *
- * AVL (for this assignment) means:
- * 1) strict BST property (no duplicates)
- * 2) height-balanced: abs(height(left) - height(right)) <= 1 at every node
- *
- * Rules:
- * - Do NOT allocate new nodes.
- * - Do NOT modify the tree.
- * - Do NOT print anything.
- *
- * Build/Run (from Assignment2 folder):
- *   make run2
- */
-
 #include <stdbool.h>
 #include <stddef.h>
+#include <limits.h>
 
 struct TreeNode {
     int val;
@@ -28,11 +8,30 @@ struct TreeNode {
     struct TreeNode *right;
 };
 
+static int max_int(int a, int b) { return (a > b) ? a : b; }
+
+static int abs_int(int x) { return (x < 0) ? -x : x; }
+
+// Returns height if valid, otherwise returns -1
+static int check_avl(struct TreeNode* node, long long lo, long long hi) {
+    if (node == NULL) return 0;
+
+    long long v = (long long)node->val;
+
+    
+    if (!(lo < v && v < hi)) return -1;
+
+    int hl = check_avl(node->left, lo, v);
+    if (hl == -1) return -1;
+
+    int hr = check_avl(node->right, v, hi);
+    if (hr == -1) return -1;
+
+    if (abs_int(hl - hr) > 1) return -1;
+
+    return 1 + max_int(hl, hr);
+}
+
 bool isAVL(struct TreeNode* root) {
-    // TODO: implement
-    // Hint: One common O(n) approach:
-    // - Use a recursive helper that returns the subtree height,
-    //   and returns -1 if subtree is invalid (BST violation or unbalanced).
-    (void)root;
-    return false;
+    return check_avl(root, LLONG_MIN, LLONG_MAX) != -1;
 }
