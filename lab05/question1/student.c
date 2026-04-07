@@ -46,7 +46,7 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
         if (find(table, need, &idx)) {
             int* ans = malloc(2*sizeof(int));
             ans[0] = idx;
-            ans[1] = i;~
+            ans[1] = i;
             *returnSize = 2;
             return ans;
         }
