@@ -1,36 +1,65 @@
-/*
-Question 2: Merge Sort
+#include <stdlib.h>
 
-Description:
-Implement merge sort to sort an integer array in ascending order.
+void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
 
-Merge sort is a divide-and-conquer algorithm:
-1. Divide the array into two halves.
-2. Recursively sort each half.
-3. Merge the two sorted halves into one sorted array.
+    int leftArr[n1];
+    int rightArr[n2];
 
-You should implement:
+    for (int i = 0; i < n1; i++) {
+        leftArr[i] = arr[left + i];
+    }
 
-    void mergeSort(int arr[], int size);
+    for (int j = 0; j < n2; j++) {
+        rightArr[j] = arr[mid + 1 + j];
+    }
 
-You may design your own helper functions.
-Suggested helper functions:
+    int i = 0;
+    int j = 0;
+    int k = left;
 
-    void mergeSortHelper(int arr[], int left, int right);
-    void merge(int arr[], int left, int mid, int right);
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
 
-Example:
-Input:  [38, 27, 43, 3, 9, 82, 10]
-Output: [3, 9, 10, 27, 38, 43, 82]
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
 
-Notes:
-- If the array is empty or has only one element, do nothing.
-- You may use temporary arrays inside your merge function.
-*/
-
-void mergeSort(int arr[], int size) {
-    // TODO: implement merge sort
-    (void)arr;
-    (void)size;
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
 }
 
+void mergeSortHelper(int arr[], int left, int right) {
+    if (left >= right) {
+        return;
+    }
+
+    int mid = left + (right - left) / 2;
+
+    mergeSortHelper(arr, left, mid);
+    mergeSortHelper(arr, mid + 1, right);
+
+    merge(arr, left, mid, right);
+}
+
+void mergeSort(int arr[], int size) {
+    if (size <= 1) {
+        return;
+    }
+
+    mergeSortHelper(arr, 0, size - 1);
+}
